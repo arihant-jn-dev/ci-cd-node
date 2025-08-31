@@ -143,17 +143,22 @@ The pipeline is defined in `.github/workflows/ci-cd.yml` and includes:
 ```
 ci_cid_node/
 ├── .github/
-│   └── workflows/
-│       ├── ci-cd.yml              # Main CI/CD pipeline (passing tests)
-│       └── ci-cd-fail.yml         # Demo pipeline (failing tests) 🆕
+│   ├── workflows/
+│   │   └── ci-cd.yml              # Active CI/CD pipeline (passing tests)
+│   └── workflows-disabled/
+│       ├── ci-cd-fail.yml         # Disabled failing pipeline for demo
+│       └── README.md              # Documentation for disabled workflows
 ├── test/
 │   ├── app.test.js               # Passing test suite
-│   └── fail.test.js              # Failing test suite 🆕
-├── index.js                      # Main application file
+│   └── fail.test.js              # Failing test suite for demo
+├── node_modules/                 # Dependencies (auto-generated)
+├── .gitignore                    # Git ignore rules
+├── index.js                      # Main Express.js application
 ├── package.json                  # Project configuration and dependencies
-├── demo-controller.sh            # Interactive demo controller 🆕
+├── package-lock.json             # Dependency lock file (auto-generated)
+├── demo-controller.sh            # Interactive demo controller
 ├── demo.sh                       # Simple demo script
-└── README.md                     # This file
+└── README.md                     # This documentation file
 ```
 
 ### File Descriptions
@@ -162,10 +167,18 @@ ci_cid_node/
 - **`test/app.test.js`**: Passing test suite covering all endpoints
 - **`test/fail.test.js`**: 🆕 Failing test suite for CI/CD failure demonstration
 - **`package.json`**: Node.js project configuration with scripts and dependencies
-- **`.github/workflows/ci-cd.yml`**: Main GitHub Actions workflow (passing tests)
-- **`.github/workflows/ci-cd-fail.yml`**: 🆕 Demo workflow for testing failures
+- **`.github/workflows/ci-cd.yml`**: **Active** GitHub Actions workflow (passing tests)
+- **`.github/workflows-disabled/ci-cd-fail.yml`**: 🆕 **Disabled** demo workflow for testing failures
+- **`.github/workflows-disabled/README.md`**: 🆕 Documentation for disabled workflows
 - **`demo-controller.sh`**: 🆕 Interactive script to switch between scenarios
+- **`.gitignore`**: Files and directories to ignore in version control
 - **`README.md`**: Comprehensive project documentation
+
+### Key Changes 🆕
+- **Failing workflow moved** to `workflows-disabled/` directory
+- **Only one active workflow** in GitHub Actions (`ci-cd.yml`)
+- **Clean separation** between active and disabled workflows
+- **Documentation** for disabled workflows included
 
 ## 🧪 Testing
 
@@ -283,8 +296,8 @@ Testing failure scenarios helps you understand:
    # Backup current workflow
    cp .github/workflows/ci-cd.yml .github/workflows/ci-cd-backup.yml
    
-   # Use failing workflow
-   cp .github/workflows/ci-cd-fail.yml .github/workflows/ci-cd.yml
+   # Use failing workflow from disabled directory
+   cp .github/workflows-disabled/ci-cd-fail.yml .github/workflows/ci-cd.yml
    
    # Commit and push
    git add .
