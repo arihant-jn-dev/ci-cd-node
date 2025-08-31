@@ -3,13 +3,18 @@
 A simple Node.js Express application demonstrating a complete CI/CD pipeline using GitHub Actions.
 
 ## 📋 Table of Contents
-- [Project Overview](#project-overview)
-- [Features](#features)
-- [Getting Started](#getting-started)
-- [API Endpoints](#api-endpoints)
-- [CI/CD Pipeline](#cicd-pipeline)
-- [Project Structure](#project-structure)
-- [Contributing](#contributing)
+- [Project Overview](#-project-overview)
+- [Features](#-features)
+- [Getting Started](#-getting-started)
+- [API Endpoints](#-api-endpoints)
+- [CI/CD Pipeline](#-cicd-pipeline)
+- [Project Structure](#-project-structure)
+- [Testing](#-testing)
+- [Development Scripts](#-development-scripts)
+- [Contributing](#-contributing)
+- [License](#-license)
+- [Next Steps](#-next-steps)
+- [Testing Pipeline Failures](#-testing-pipeline-failures)
 
 ## 🎯 Project Overview
 
