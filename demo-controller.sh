@@ -48,10 +48,15 @@ case $choice in
   2)
     echo ""
     echo "🔴 Setting up FAILING pipeline..."
-    # Backup original workflow and use failing one
-    cp .github/workflows/ci-cd.yml .github/workflows/ci-cd-backup.yml
-    cp .github/workflows/ci-cd-fail.yml .github/workflows/ci-cd.yml
-    echo "✅ Failing pipeline configured"
+    # Move the failing workflow to active directory
+    if [ -f ".github/workflows-disabled/ci-cd-fail.yml" ]; then
+      # Backup original workflow and use failing one
+      cp .github/workflows/ci-cd.yml .github/workflows/ci-cd-backup.yml
+      cp .github/workflows-disabled/ci-cd-fail.yml .github/workflows/ci-cd.yml
+      echo "✅ Failing pipeline configured"
+    else
+      echo "❌ Failing workflow file not found in disabled directory"
+    fi
     echo ""
     echo "📋 To trigger the failing pipeline:"
     echo "   git add ."
@@ -62,12 +67,19 @@ case $choice in
     echo ""
     echo "⚠️  To restore passing pipeline later:"
     echo "   cp .github/workflows/ci-cd-backup.yml .github/workflows/ci-cd.yml"
+    echo "   rm .github/workflows/ci-cd-backup.yml"
     ;;
     
   3)
     echo ""
     echo "📊 Current Pipeline Status:"
     echo "=========================="
+    echo "🟢 Active workflows:"
+    ls -la .github/workflows/*.yml 2>/dev/null | awk '{print "   " $9}' || echo "   No active workflows"
+    echo ""
+    echo "🔴 Disabled workflows:"
+    ls -la .github/workflows-disabled/*.yml 2>/dev/null | awk '{print "   " $9}' || echo "   No disabled workflows"
+    echo ""
     if [ -f ".github/workflows/ci-cd-backup.yml" ]; then
       echo "🔴 FAILING pipeline is currently active"
       echo "   Tests will intentionally fail"
