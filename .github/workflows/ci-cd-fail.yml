@@ -10,10 +10,12 @@
 name: Node.js CI/CD Pipeline (FAILING DEMO)
 
 # Trigger the workflow on push to main branch and on pull requests
+# DISABLED: This workflow is currently disabled. To enable, change 'if: false' to 'if: true'
 on:
   push:
     branches: [ main ]
   pull_request:
+    branches: [ main ]
     branches: [ main ]
 
 # Define the jobs that will run in this workflow
@@ -23,6 +25,7 @@ jobs:
   build:
     name: Build Application
     runs-on: ubuntu-latest
+    if: false  # DISABLED: Set to 'true' to enable this workflow
     
     steps:
       # Step 1: Get the source code from the repository
