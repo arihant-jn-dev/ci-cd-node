@@ -139,40 +139,61 @@ The pipeline is defined in `.github/workflows/ci-cd.yml` and includes:
 ci_cid_node/
 ├── .github/
 │   └── workflows/
-│       └── ci-cd.yml          # GitHub Actions CI/CD pipeline
+│       ├── ci-cd.yml              # Main CI/CD pipeline (passing tests)
+│       └── ci-cd-fail.yml         # Demo pipeline (failing tests) 🆕
 ├── test/
-│   └── app.test.js           # Test suite
-├── index.js                  # Main application file
-├── package.json              # Project configuration and dependencies
-└── README.md                 # This file
+│   ├── app.test.js               # Passing test suite
+│   └── fail.test.js              # Failing test suite 🆕
+├── index.js                      # Main application file
+├── package.json                  # Project configuration and dependencies
+├── demo-controller.sh            # Interactive demo controller 🆕
+├── demo.sh                       # Simple demo script
+└── README.md                     # This file
 ```
 
 ### File Descriptions
 
 - **`index.js`**: Main Express.js application with all routes and middleware
-- **`test/app.test.js`**: Custom test suite covering all endpoints
+- **`test/app.test.js`**: Passing test suite covering all endpoints
+- **`test/fail.test.js`**: 🆕 Failing test suite for CI/CD failure demonstration
 - **`package.json`**: Node.js project configuration with scripts and dependencies
-- **`.github/workflows/ci-cd.yml`**: GitHub Actions workflow definition
+- **`.github/workflows/ci-cd.yml`**: Main GitHub Actions workflow (passing tests)
+- **`.github/workflows/ci-cd-fail.yml`**: 🆕 Demo workflow for testing failures
+- **`demo-controller.sh`**: 🆕 Interactive script to switch between scenarios
 - **`README.md`**: Comprehensive project documentation
 
 ## 🧪 Testing
 
-The project includes a custom test suite that covers:
+The project includes two test suites to demonstrate different CI/CD scenarios:
 
-- ✅ Root endpoint functionality
-- ✅ Health check endpoint
-- ✅ User API endpoints (GET and POST)
-- ✅ Error handling (404, validation errors)
-- ✅ Response format validation
+### ✅ Passing Tests (`test/app.test.js`)
+- Root endpoint functionality
+- Health check endpoint
+- User API endpoints (GET and POST)
+- Error handling (404, validation errors)
+- Response format validation
+
+### ❌ Failing Tests (`test/fail.test.js`)
+- API contract breaking changes
+- Status code validation failures
+- Data structure validation failures
+- Business logic failures
+- Security test failures
 
 ### Running Tests Locally
 
 ```bash
-# Run the test suite
+# Run the passing test suite
 npm test
+
+# Run the failing test suite (to see pipeline failures)
+npm run test:fail
 
 # Start the app for manual testing
 npm start
+
+# Use the demo controller for easy switching
+./demo-controller.sh
 ```
 
 ### Test Coverage
@@ -183,14 +204,17 @@ The tests verify:
 - Data validation
 - Error handling
 - API functionality
+- **Pipeline failure scenarios** 🆕
 
 ## 🔧 Development Scripts
 
 - `npm start` - Start the production server
 - `npm run dev` - Start the development server (same as start in this demo)
 - `npm run build` - Run build process (placeholder in this demo)
-- `npm test` - Run the test suite
+- `npm test` - Run the passing test suite
+- `npm run test:fail` - Run the failing test suite (for CI/CD failure demo) 🆕
 - `npm run test:coverage` - Run tests with coverage (placeholder)
+- `./demo-controller.sh` - Interactive demo controller for switching between scenarios 🆕
 
 ## 🤝 Contributing
 
@@ -228,6 +252,77 @@ To see the CI/CD pipeline in action:
 3. **View the pipeline**: Go to your GitHub repository → Actions tab to see the pipeline running
 
 The pipeline will automatically trigger and you'll see the build, test, and deploy stages executing in sequence.
+
+## 💥 Testing Pipeline Failures
+
+This project includes special failing tests to demonstrate how CI/CD pipelines handle failures and prevent broken deployments.
+
+### 🎯 Why Test Failures?
+
+Testing failure scenarios helps you understand:
+- How pipelines prevent broken code from reaching production
+- What happens when tests fail in different stages
+- How to debug and fix pipeline issues
+- The importance of comprehensive testing
+
+### 🚀 Quick Demo: See Pipeline Failure in Action
+
+1. **Use the demo controller:**
+   ```bash
+   ./demo-controller.sh
+   ```
+   Choose option 2 for "FAILING Pipeline"
+
+2. **Or manually switch to failing tests:**
+   ```bash
+   # Backup current workflow
+   cp .github/workflows/ci-cd.yml .github/workflows/ci-cd-backup.yml
+   
+   # Use failing workflow
+   cp .github/workflows/ci-cd-fail.yml .github/workflows/ci-cd.yml
+   
+   # Commit and push
+   git add .
+   git commit -m "Test pipeline failure scenarios"
+   git push origin main
+   ```
+
+3. **Watch the pipeline fail:**
+   - Go to GitHub → Actions tab
+   - See: ✅ Build → ❌ Test → 🚫 Deploy (skipped)
+   - The deploy stage will be completely skipped
+
+4. **Restore passing pipeline:**
+   ```bash
+   cp .github/workflows/ci-cd-backup.yml .github/workflows/ci-cd.yml
+   git add .
+   git commit -m "Restore passing pipeline"
+   git push origin main
+   ```
+
+### 🔍 Failure Scenarios Included
+
+The failing tests simulate real-world issues:
+
+1. **API Contract Changes** - When API responses change unexpectedly
+2. **Status Code Issues** - Wrong HTTP status codes
+3. **Data Structure Problems** - Changed response formats
+4. **Business Logic Errors** - Incorrect application behavior
+5. **Security Vulnerabilities** - Missing input validation
+
+### 📊 Understanding Pipeline Behavior
+
+**Passing Pipeline Flow:**
+```
+Push to main → ✅ Build → ✅ Test → ✅ Deploy → 🎉 Success
+```
+
+**Failing Pipeline Flow:**
+```
+Push to main → ✅ Build → ❌ Test → 🚫 Deploy Skipped → 🛡️ Protected
+```
+
+This demonstrates the **safety net** that CI/CD provides!
 
 ---
 

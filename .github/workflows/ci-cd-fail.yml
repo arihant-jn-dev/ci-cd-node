@@ -1,0 +1,99 @@
+# GitHub Actions CI/CD Pipeline with FAILING Tests
+# This workflow demonstrates what happens when tests fail in the pipeline
+# 
+# To use this workflow:
+# 1. Rename this file to "ci-cd.yml" (replacing the current one)
+# 2. Push to main branch
+# 3. Watch the pipeline fail at the test stage
+# 4. See how the deploy stage is skipped due to test failures
+
+name: Node.js CI/CD Pipeline (FAILING DEMO)
+
+# Trigger the workflow on push to main branch and on pull requests
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+# Define the jobs that will run in this workflow
+jobs:
+  # JOB 1: BUILD
+  # This job handles dependency installation and project building
+  build:
+    name: Build Application
+    runs-on: ubuntu-latest
+    
+    steps:
+      # Step 1: Get the source code from the repository
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        
+      # Step 2: Set up Node.js environment
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'  # Use Node.js version 20 LTS
+          cache: 'npm'        # Cache npm dependencies for faster builds
+          
+      # Step 3: Install dependencies
+      - name: Install dependencies
+        run: npm ci
+        
+      # Step 4: Run build script
+      - name: Build application
+        run: npm run build
+
+  # JOB 2: TEST (WILL FAIL)
+  # This job runs the FAILING test suite to demonstrate pipeline failure
+  test:
+    name: Run Tests (Will Fail)
+    runs-on: ubuntu-latest
+    needs: build  # This job depends on the build job completing successfully
+    
+    steps:
+      # Step 1: Get the source code
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        
+      # Step 2: Set up Node.js
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          
+      # Step 3: Install dependencies
+      - name: Install dependencies
+        run: npm ci
+        
+      # Step 4: Run the FAILING test suite
+      - name: Run failing tests (Demo)
+        run: npm run test:fail  # This will run the failing tests
+        
+      # This step will not be reached due to test failures
+      - name: This step won't run
+        run: echo "This step is skipped because tests failed"
+
+  # JOB 3: DEPLOY (WILL BE SKIPPED)
+  # This job will NOT run because the test job failed
+  deploy:
+    name: Deploy to Production (Will be Skipped)
+    runs-on: ubuntu-latest
+    needs: test  # This job depends on tests passing (which they won't)
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    
+    steps:
+      # These steps will not run because the test job failed
+      - name: This step won't run
+        run: echo "❌ Deploy skipped due to test failures"
+        
+      - name: Deployment prevented
+        run: |
+          echo "🛡️  The CI/CD pipeline successfully prevented deployment"
+          echo "🚫 Broken code did not reach production"
+          echo "✅ Pipeline working as intended!"
+
+# Environment variables
+env:
+  NODE_ENV: production

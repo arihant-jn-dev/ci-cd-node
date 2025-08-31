@@ -8,6 +8,7 @@
     "dev": "node index.js",
     "build": "echo 'Build step - In a real app, this would compile TypeScript, bundle assets, etc.'",
     "test": "node test/app.test.js",
+    "test:fail": "node test/fail.test.js",
     "test:coverage": "echo 'Coverage would run here in a real app'"
   },
   "keywords": ["nodejs", "express", "ci-cd", "github-actions", "demo"],
