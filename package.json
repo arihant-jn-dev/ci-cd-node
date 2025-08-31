@@ -1,0 +1,23 @@
+{
+  "name": "ci-cd-node-demo",
+  "version": "1.0.0",
+  "description": "A simple Node.js Express application demonstrating CI/CD pipeline with GitHub Actions",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "node index.js",
+    "build": "echo 'Build step - In a real app, this would compile TypeScript, bundle assets, etc.'",
+    "test": "node test/app.test.js",
+    "test:coverage": "echo 'Coverage would run here in a real app'"
+  },
+  "keywords": ["nodejs", "express", "ci-cd", "github-actions", "demo"],
+  "author": "Your Name",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.18.2"
+  },
+  "devDependencies": {},
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
